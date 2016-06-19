@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+
+<script src="js/jquery-3.0.0.min.js"></script>
+<script src="js/velocity.min.js"></script>
+<script src="js/cufon-yui.js"></script>
+<script src="js/Handel_Gothic.font.js"></script>
+<script src="js/soundmanager2-jsmin.js"></script>
+<script src="js/Thunder/thunder-1.1.0.min.js"></script>
+<script src="js/Thunder/gui/scrollbar.min.js"></script>
+<script src="js/Widget/ScrollWidget.js"></script>
+<script src="js/Game/Indicator.js"></script>
+<script src="js/Game/StatusBar.js"></script>
+<script src="js/Game/Projectile.js"></script>
+<script src="js/Game/Animation.js"></script>
+<script src="js/Game/NodeMap.js"></script>
+<script src="js/Game/Barrier.js"></script>
+<script src="js/Game/Entity.js"></script>
+<script src="js/Game/MobileEntity.js"></script>
+<script src="js/Game/StaticEntity.js"></script>
+<script src="js/Game/TankEntity.js"></script>
+<script src="js/Game/PlayerTankEntity.js"></script>
+<script src="js/Game/EnemyTankEntity.js"></script>
+<script src="js/Game/Button.js"></script>
+<script src="js/Game/LevelManager.js"></script>
+<script src="js/Game/MiniMap.js"></script>
+<script src="js/Game/NavBar.js"></script>
+<script src="js/Game/MessageWidget.js"></script>
+<script src="js/Game/Dialog.js"></script>
+<script src="js/Game/Game.js"></script>
+<script src="js/Game/Application.js"></script>
+
+<html>
+  <head>
+    <title>Armored Titans: Proving Grounds</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  </head>
+  <body>
+    <div id="ads">
+        <div class="button" onClick="hideAds();">Hide Ads</div>
+        <iframe id="ads-iframe" src="" width="300" height="500" scrolling="no" style="border: none;"></iframe>        
+    </div>
+    <div id="root">
+		<div id="progress_box">
+			<img src="image/load_pic.jpg"/>
+			<div id="progress_bar"></div>
+			<div id="progress_field">Loading...</div>
+		</div>
+    </div>    
+    <div id="preloader" style="display: none"></div>
+  </body>
+</html>
+
+<script type="text/javascript">
+Thunder.DEBUG = false;
+var App;
+var debug = Thunder.DEBUG;
+var gIsMobile = (navigator.userAgent.toLowerCase().search(/iphone|ipod|ipad|android|mobile|sony|symbian|nokia|samsung|windows ce|epoc|opera mini|nitro|j2me|netfront|mot|blackberry|ericsson|panasonic|philips|sanyo|sharp|portalmmm|blazer|avantgo|danger|palm|series60|palmso|urce|pocketpc|smartphone|rover|ipaq|alcatel|ericy|vodafone/i) > -1);
+var gAudio = [];
+var gBackgroundAudio = [];
+var gAdWidth = 0;
+var gHost = "pindax.com";
+var gUserLevel = 1;
+var gUserMaps = [];
+var gAchievements = [];
+var gResumeAudio = true;
+
+for(var i = 1; i <= 16; i++) {
+	var c = (i < 10) ? "0" + i : i;
+	gAchievements["LEVEL_" + i] = {"key":"level" + c,"description":"Complete Level " + i};
+}
+
+gAchievements["THE_ASPHALT_JUNGLE"] = {"key":"the_asphalt_jungle","description":"Win a battle on The Asphalt Jungle"};
+gAchievements["THE_CAN_OPENER"] = {"key":"the_can_opener","description":"Win a battle on The Can Opener"};
+gAchievements["THE_TURKEY_SHOOT"] = {"key":"the_turkey_shoot","description":"Win a battle on The Turkey Shoot"};
+gAchievements["THE_GAUNTLET"] = {"key":"the_gauntlet","description":"Win a battle on The Gauntlet"};
+gAchievements["THE_MEAT_GRINDER"] = {"key":"the_meat_grinder","description":"Win a battle on The Meat Grinder"};
+gAchievements["THE_CAULDRON"] = {"key":"the_cauldron","description":"Win a battle on The Cauldron"};
+
+var gImageLoaderCheckInterval;
+var gImageLoaderTimeOutCounter = 0;
+var gPreloaderImages; 
+
+$(document).ready(function() {
+	var h = "<img src='image/transpix.gif'/>";
+	h += "<img src='image/dialog/shade.png'/>";
+	h += "<img src='image/loader.gif'/>";
+    h += "<img src='image/start_pic.jpg'/>";
+    h += "<img src='image/bg_message.png'/>";
+	h += "<img src='image/btn/accept.jpg'/>";
+	h += "<img src='image/btn/cancel.jpg'/>";
+	h += "<img src='image/btn/chat.jpg'/>";
+	h += "<img src='image/btn/close.jpg'/>";
+	h += "<img src='image/btn/decline.jpg'/>";
+	h += "<img src='image/btn/howToPlay.jpg'/>";
+	h += "<img src='image/btn/likeTheGame.jpg'/>";
+	h += "<img src='image/btn/menu.jpg'/>";
+	h += "<img src='image/btn/more.jpg'/>";
+	h += "<img src='image/btn/multiplayer.jpg'/>";
+	h += "<img src='image/btn/nextLevel.jpg'/>";
+	h += "<img src='image/btn/no.jpg'/>";
+	h += "<img src='image/btn/ok.jpg'/>";
+	h += "<img src='image/btn/quit.jpg'/>";
+	h += "<img src='image/btn/replayLevel.jpg'/>";
+	h += "<img src='image/btn/send.jpg'/>";
+	h += "<img src='image/btn/sendChallenge.jpg'/>";
+	h += "<img src='image/btn/share.jpg'/>";
+	h += "<img src='image/btn/singleplayer.jpg'/>";
+	h += "<img src='image/btn/soundOff.jpg'/>";
+	h += "<img src='image/btn/soundOffSmall.jpg'/>";
+	h += "<img src='image/btn/soundOn.jpg'/>";
+	h += "<img src='image/btn/soundOnSmall.jpg'/>";
+	h += "<img src='image/btn/start.jpg'/>";
+	h += "<img src='image/btn/video.jpg'/>";
+	h += "<img src='image/btn/x.jpg'/>";
+	h += "<img src='image/btn/yes.jpg'/>";
+	h += "<img src='image/btn/signIn.jpg'/>";
+	h += "<img src='image/btn/cancelSmall.jpg'/>";
+	h += "<img src='image/inGameLogo.png'/>";
+	h += "<img src='image/TheAsphaultJungle.jpg'/>";
+    h += "<img src='image/TheCanOpener.jpg'/>";
+    h += "<img src='image/TheCauldron.jpg'/>";
+    h += "<img src='image/TheGauntlet.jpg'/>";
+    h += "<img src='image/TheMeatGrinder.jpg'/>";
+    h += "<img src='image/TheTurkeyShoot.jpg'/>";
+    h += "<img src='image/House40-Destroyed.png'/>";
+    h += "<img src='image/House40-blue.png'/>";
+    h += "<img src='image/House40-pink.png'/>";
+    h += "<img src='image/House40-green.png'/>";
+    h += "<img src='image/House40-white.png'/>";
+    h += "<img src='image/House60-Destroyed.png'/>";
+    h += "<img src='image/House60-garage.png'/>";
+    h += "<img src='image/House60-green.png'/>";
+    h += "<img src='image/House60-purple.png'/>";
+    h += "<img src='image/House80-blue.png'/>";
+    h += "<img src='image/House80-Destroyed.png'/>";
+    h += "<img src='image/House80-green.png'/>";
+    h += "<img src='image/House80-orange.png'/>";
+    h += "<img src='image/House80-yellow.png'/>";
+    h += "<img src='image/pond100x120.png'/>";
+    h += "<img src='image/pond100x80.png'/>";
+    h += "<img src='image/pond140x160.png'/>";
+    h += "<img src='image/river-bottom.png'/>";
+    h += "<img src='image/river-middle.png'/>";
+    h += "<img src='image/river-top.png'/>";
+    h += "<img src='image/Tree40-Destroyed.png'/>";
+    h += "<img src='image/Tree40-summer.png'/>";
+    h += "<img src='image/DestroyedEnemyTankStrip.png'/>";
+    h += "<img src='image/DestroyedPlayerTankStrip.png'/>";
+    h += "<img src='image/PlayerTankStrip.png'/>";
+    h += "<img src='image/EnemyTankStrip.png'/>";
+    h += "<img src='image/marker.jpg'/>";
+    h += "<img src='image/OrientationStrip.png'/>";
+    h += "<img src='image/ExplosionStrip.png'/>";
+    h += "<img src='image/shell.jpg'/>";
+    h += "<img src='image/TargetStrip.png'/>"; 
+	$("#preloader").html(h);
+	
+	gPreloaderImages = $("#preloader img");
+	gImageLoaderCheckInterval = setInterval(imageLoadChecker,100);
+	$("#root").width($(window).width() - gAdWidth);
+});
+
+function imageLoadChecker() {	
+	//ensure that all preloader images have loaded before proceeding	
+	var c = 0;
+	
+	if(gPreloaderImages.length > 0 && (++gImageLoaderTimeOutCounter) < 200) {		
+		for(var i = 0; i < gPreloaderImages.length; i++) {
+			if ( gPreloaderImages[i].complete || gPreloaderImages[i].readyState == 4 || gPreloaderImages[i].readyState == "complete" ) {
+				c++;
+			}
+		}
+		
+		var p = Math.floor(c / (gPreloaderImages.length / 100));
+		$("#progress_field").html("Loading: " + p + "%");
+		$("#progress_bar").css({"width": ((160 / 100) * p) + "px"});
+		
+		if(c >= gPreloaderImages.length) {
+			start();
+		}
+	} else {
+		if(gImageLoaderTimeOutCounter >= 200) {
+			if(window.console) console.log("Image Loader timed out.");
+		}
+		
+		start();
+	}
+}
+
+function start() {
+	clearInterval(gImageLoaderCheckInterval);
+	
+	if(gIsMobile) {
+		$("#root").bind("touchmove",function(event){ event.preventDefault(); });
+	}
+	
+	Cufon.replace('.Handel_Gothic', { fontFamily: 'Handel Gothic D', display: 'block' });
+	App = new Application($("#root").empty(),debug);
+	
+	soundManager.onready(function() {
+		if (soundManager.supported() && !gIsMobile) {
+			gAudio["EXPLOSION"] = soundManager.createSound({ id: 'explosion', url: 'audio/explosion.mp3', autoLoad: true, stream: false });
+			gAudio["CANON"] = soundManager.createSound({ id: 'canon', url: 'audio/canon.mp3', autoLoad: true, stream: false });
+			gAudio["YES_SIR"] = soundManager.createSound({ id: 'yes_sir', url: 'audio/yes_sir.mp3', autoLoad: true, stream: false });
+			gAudio["MOVING_OUT"] = soundManager.createSound({ id: 'moving_out', url: 'audio/moving_out.mp3', autoLoad: true, stream: false });
+			gAudio["TARGET_CONFIRMED"] = soundManager.createSound({ id: 'target_confirmed', url: 'audio/target_confirmed.mp3', autoLoad: true, stream: false });
+			gAudio["ATTACKING_TARGET"] = soundManager.createSound({ id: 'attacking_target', url: 'audio/attacking_target.mp3', autoLoad: true, stream: false });
+			gAudio["ROGER_THAT"] = soundManager.createSound({ id: 'roger_that', url: 'audio/roger_that.mp3', autoLoad: true, stream: false });		
+			gAudio["HIT"] = soundManager.createSound({ id: 'hit', url: 'audio/hit.mp3', autoLoad: true, stream: false });
+			gAudio["ENEMY_DESTROYED"] = soundManager.createSound({ id: 'enemy_destroyed', url: 'audio/enemy_destroyed.mp3', autoLoad: true, stream: false });
+			gAudio["CANT_MOVE_THERE"] = soundManager.createSound({ id: 'cant_move_there', url: 'audio/cant_move_there.mp3', autoLoad: true, stream: false });
+			
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_01', url: 'audio/atpg_01.mp3', autoLoad: true, stream: true }));
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_02', url: 'audio/atpg_02.mp3', autoLoad: true, stream: true }));
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_03', url: 'audio/atpg_03.mp3', autoLoad: true, stream: true }));
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_04', url: 'audio/atpg_04.mp3', autoLoad: true, stream: true }));
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_05', url: 'audio/atpg_05.mp3', autoLoad: true, stream: true }));
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_06', url: 'audio/atpg_06.mp3', autoLoad: true, stream: true }));
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_07', url: 'audio/atpg_07.mp3', autoLoad: true, stream: true }));
+			gBackgroundAudio.push(soundManager.createSound({ id: 'atpg_08', url: 'audio/atpg_08.mp3', autoLoad: true, stream: true }));
+			
+			//App.playRandomBackgroundAudio();
+		} else {
+			if(window.console) { 
+				console.log("soundManager did not load.")
+			}
+		}
+	});
+}
+
+function hideAds() {
+	$('#ads').hide();
+	$('#ads-iframe').attr("src","");
+	$('#root').css('left','0px')
+	gAdWidth = 0;
+	$(window).trigger("resize");
+}
+
+function showAds() {
+	$('#ads-iframe').attr("src","ads.html");
+	$('#ads').delay(500).show();
+	$('#root').css('left','300px')
+	gAdWidth = 300;
+	$(window).trigger("resize");
+}
+
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-76141-5']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+</script>
