@@ -13,56 +13,50 @@ var ScrollWidget = Thunder.Component.extend({
 		this.assetManager.addAsset("gui","vScrollbar",null,"scroll",this.width - 8,20,8,this.height - 20);
 		
 		//Initialize layers
-		this.layerManager.defineSet("GUI");
+		this.layerManager.addLayer("/GUI");
 				
 		//start
+		this.createResponders();
+		this.createCustomizers();
 		this.draw();
 	},
 	
-	handleEvents: function(events) {
-		for(var i = 0; i < events.length; i++) {
-			if(this.debug) this.trace("SCROLLWIDGET: " + events[i].name);
-			
-			switch(events[i].name) {
-				case "SCROLL_UPDATE":
-					var y = events[i].owner.getValue() * -1;
-					var asset = this.assetManager.getAsset("doc");
-					
-					if(asset != null) {
-						asset.getContainer().find(".loader").css("top",y);
-					}
-					break;
-				case "UPDATE":
-					this.update();
-					break;
-			}
-		}
-	},
-	
-	handleCustomization: function(assetList) {
+	createResponders: function(events) {
 		var t = this;
 		
-		for(var i = 0, ii = assetList.length; i < ii; i++) {
-			var asset = assetList[i];	
-		
-			switch (asset.type) {	
-				case "html":
-					asset.container.html("<div class='loader' style='position:absolute;width: " + (this.width - 16) + "px'></div>");
-					asset.container.find(".loader").load(asset.src + "?" + (new Date()).getTime(), function() { Cufon.now(); Cufon.refresh(); t.refresh() });
-					asset.setMask(0,asset.width,asset.height,0);
-					break;
-				case "vScrollbar":
-					asset.setVisible(false);
-					this.vScrollObj = new Thunder.Scrollbar(asset.container,asset.tag,this.getScrollbarAssetManager(),asset.width,asset.height);
-					this.vScrollObj.setIncrement(10);
-					this.vScrollObj.addListener(this.eventQueue);
-					break;
+		this.addResponder("SCROLL_UPDATE", function(event) {
+			var y = event.owner.getValue() * -1;
+			var asset = this.assetManager.getAsset("doc");
+			
+			if(asset != null) {
+				asset.getContainer().find(".loader").css("top",y);
 			}
-		}
+		});
+		
+		this.addResponder("UPDATE", function(event) {
+			t.update();
+		});
+	},
+	
+	createCustomizers: function(assetList) {
+		var t = this;
+		
+		this.addCustomizer("html", function(asset) {
+			asset.container.html("<div class='loader' style='position:absolute;width: " + (t.width - 16) + "px'></div>");
+			asset.container.find(".loader").load(asset.src + "?" + (new Date()).getTime(), function() { Cufon.now(); Cufon.refresh(); t.refresh() });
+			asset.setMask(0,asset.width,asset.height,0);
+		});
+		
+		this.addCustomizer("vScrollbar", function(asset) {
+			asset.setVisible(false);
+			t.vScrollObj = new Thunder.Scrollbar(asset.container,asset.tag,t.getScrollbarAssetManager(),asset.width,asset.height);
+			t.vScrollObj.setIncrement(10);
+			t.vScrollObj.addListener(t.eventQueue);
+		});
 	},
 	
 	draw: function() {
-		this.layerManager.layOut(this.assetManager.getAssets("gui"),"GUI",0);
+		this.layerManager.layOut(this.assetManager.getAssets("gui"),"/GUI");
 	},
 	
 	getScrollbarAssetManager: function() {
