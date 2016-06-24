@@ -43,10 +43,6 @@ var PlayerTankEntity = TankEntity.extend({
 			t.eventQueue.addUniqueEvent("BLINK_IDLE_BORDER",1500);
 		});
 		
-		/* default:
-			t._super(events);
-			}
-		} */
 		this._super();
 	},
 
@@ -121,8 +117,6 @@ var PlayerTankEntity = TankEntity.extend({
 		this._super();
 
 		if(this.isDestroyed) {
-			if(this.selected) this.broadcastUniqueEvent("CLEAR_PATH_DISPLAY",null,100);
-
 			if(!App.game.muteSound) {
 				this.broadcastUniqueEvent("PLAY_HIT",null,100);
 			}
@@ -136,7 +130,9 @@ var PlayerTankEntity = TankEntity.extend({
 		this._super();
 
 		if(this.route.length == 0 && this.selected) {
-			this.broadcastUniqueEvent("CLEAR_PATH_DISPLAY",null,100);
+			if(this.route.length > 0) { App.game.clearPath(); }
+		} else if(this.selected) {
+			if(this.route.length > 0) { App.game.drawPath(this.route); }
 		}
 
 		this.hanldeIdleBorderBlink();
@@ -159,7 +155,7 @@ var PlayerTankEntity = TankEntity.extend({
 		}
 
 		if(!this.selected) {
-			if(this.route.length > 0) this.broadcastUniqueEvent("CLEAR_PATH_DISPLAY",null,100);
+			if(this.route.length > 0) { App.game.clearPath(); }
 		} else {
 			if(this.route.length > 0) { App.game.drawPath(this.route); }
 		}

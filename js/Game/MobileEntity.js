@@ -125,7 +125,8 @@ var MobileEntity = Entity.extend({
 					var d = this.getPosition().getDistance(newPosition);
 					var t = (d / this.maxSpeed) * 1000;
 					var m = this;
-
+					
+					this.container.stop(1,1);
 					this.container.animate({top: newPosition.y, left: newPosition.x},t,'linear',function() {
 						m.move();
 					});

@@ -50,7 +50,7 @@
 </html>
 
 <script type="text/javascript">
-Thunder.DEBUG = false;
+Thunder.DEBUG = true;
 var App;
 var debug = Thunder.DEBUG;
 var gIsMobile = (navigator.userAgent.toLowerCase().search(/iphone|ipod|ipad|android|mobile|sony|symbian|nokia|samsung|windows ce|epoc|opera mini|nitro|j2me|netfront|mot|blackberry|ericsson|panasonic|philips|sanyo|sharp|portalmmm|blazer|avantgo|danger|palm|series60|palmso|urce|pocketpc|smartphone|rover|ipaq|alcatel|ericy|vodafone/i) > -1);
@@ -196,8 +196,12 @@ function start() {
 	Cufon.replace('.Handel_Gothic', { fontFamily: 'Handel Gothic D', display: 'block' });
 	App = new Application($("#root").empty(),debug);
 	
+	soundManager.setup({
+		debugMode: false 
+	});
+	
 	soundManager.onready(function() {
-		if (soundManager.supported() && !gIsMobile) {
+		if (soundManager.supported() && !gIsMobile) {			
 			gAudio["EXPLOSION"] = soundManager.createSound({ id: 'explosion', url: 'audio/explosion.mp3', autoLoad: true, stream: false });
 			gAudio["CANON"] = soundManager.createSound({ id: 'canon', url: 'audio/canon.mp3', autoLoad: true, stream: false });
 			gAudio["YES_SIR"] = soundManager.createSound({ id: 'yes_sir', url: 'audio/yes_sir.mp3', autoLoad: true, stream: false });

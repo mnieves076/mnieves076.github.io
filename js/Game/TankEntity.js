@@ -267,7 +267,12 @@ var TankEntity = MobileEntity.extend({
 
 			this.assetManager.getAsset("STRIP").src = this.source;
 			this.draw();
-
+			
+			if(this instanceof PlayerTankEntity) {
+				this.broadcastUniqueEvent("ASSIGN_TARGETS",null,100);
+				if(this.selected) this.broadcastUniqueEvent("CLEAR_PATH_DISPLAY",null,100);
+			}
+			
 			//Turn off selection
 			if(this.selected) {
 				this.toggleSelection();
@@ -275,10 +280,6 @@ var TankEntity = MobileEntity.extend({
 
 			//Remove from node map
 			this.updateNodeMap(0);
-
-			if(this instanceof PlayerTankEntity) {
-				this.broadcastUniqueEvent("ASSIGN_TARGETS",null,100);
-			}
 
 			this.broadcastUniqueEvent("CHECK_FOR_VICTORY",null,100);
 			App.game.moveToBack(this.container);
