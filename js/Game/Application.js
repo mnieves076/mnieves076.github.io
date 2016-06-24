@@ -138,12 +138,10 @@ var Application = Thunder.Component.extend({
 		});
 		
 		this.addResponder("DISPLAY_WIN_DIALOG",function(event) {
-			showAds();
 			t.drawDialog("win");
 		});
 		
 		this.addResponder("DISPLAY_LOSE_DIALOG",function(event) {
-			showAds();
 			t.drawDialog("lose");
 		});
 		
@@ -358,7 +356,7 @@ var Application = Thunder.Component.extend({
 				html = "<iframe src='//www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FArmored-Titans-Proving-Grounds%2F324490847582726&amp;width=460&amp;height=430&amp;colorscheme=dark&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=false&amp;appId=320397024645847' scrolling='no' frameborder='0' style='border:none; overflow:hidden; width:460px; height:430px;' allowTransparency='true'></iframe>";
 				break;
 			case "COPYRIGHT_HTML":
-				html += "<div class='footer'>&#169; 2015 PinDax LLC, All rights reserved.</div>";
+				html += "<div class='footer'>&#169; 2015-2016 PinDax LLC, All rights reserved.</div>";
 				break;
 			case "MULTIPLAYER_HTML":
 				html += "<div class='Handel_Gothic'><h3>Multiplayer</h3></div>";

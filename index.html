@@ -38,10 +38,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   </head>
   <body>
-    <div id="ads">
-        <div class="button" onClick="hideAds();">Hide Ads</div>
-        <iframe id="ads-iframe" src="" width="300" height="500" scrolling="no" style="border: none;"></iframe>        
-    </div>
     <div id="root">
 		<div id="progress_box">
 			<img src="image/load_pic.jpg"/>
@@ -229,22 +225,6 @@ function start() {
 			}
 		}
 	});
-}
-
-function hideAds() {
-	$('#ads').hide();
-	$('#ads-iframe').attr("src","");
-	$('#root').css('left','0px')
-	gAdWidth = 0;
-	$(window).trigger("resize");
-}
-
-function showAds() {
-	$('#ads-iframe').attr("src","ads.html");
-	$('#ads').delay(500).show();
-	$('#root').css('left','300px')
-	gAdWidth = 300;
-	$(window).trigger("resize");
 }
 
 var _gaq = _gaq || [];
