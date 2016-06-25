@@ -103,7 +103,6 @@ var MobileEntity = Entity.extend({
 	},
 
 	move: function() {
-		var tt = this;
 		this.isMoving = true;
 		this.moving = false;
 

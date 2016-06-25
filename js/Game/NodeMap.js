@@ -164,13 +164,15 @@ var NodeMap = BaseObject.extend({
 		}
 
 		if(this.inBounds(node)) {
-			var w = (entity.width - entity.blockOffsetX) / this.size;
-			var h = (entity.height - entity.blockOffsetY) / this.size;
-
-			var xStartRange = node.x - w / 2;
-			var xEndRange = node.x + w / 2;
-			var yStartRange = node.y - h / 2;
-			var yEndRange = node.y + h / 2;
+			//var w = (entity.width - entity.blockOffsetX) / this.size;
+			//var h = (entity.height - entity.blockOffsetY) / this.size;
+			var w = entity.width / this.size;
+			var h = entity.height / this.size;
+		
+			var xStartRange = node.x - Math.ceil(w / 2);
+			var xEndRange = node.x + Math.ceil(w / 2);
+			var yStartRange = node.y - Math.ceil(h / 2);
+			var yEndRange = node.y + Math.ceil(h / 2);
 
 			if(xStartRange < 0) {
 				xStartRange = 0;
