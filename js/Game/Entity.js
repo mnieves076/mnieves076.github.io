@@ -13,6 +13,7 @@ var Entity = Thunder.Component.extend({
 		this.healthStatusBar;
 		this.blockOffsetX = initParam.blockOffsetX;
 		this.blockOffsetY = initParam.blockOffsetY;
+		this.id = initParam.id;
 		this.isDestroyed = false;
 
 		//Initialize assets

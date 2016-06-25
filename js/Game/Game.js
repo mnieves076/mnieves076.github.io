@@ -250,6 +250,7 @@ var Game = Thunder.Component.extend({
 		
 		t.addCustomizer("static", function(asset) {
 			var n = t.nodeMap.mapPointToNode(asset.getPosition().addPoint(new Thunder.Point(asset.width / 2,asset.height / 2)));
+			asset.param.id = asset.tag;
 			t.staticEntities.push(new StaticEntity(asset.container,n, t.nodeMap, asset.src,asset.width,asset.height,asset.param,t.debug));
 		});
 		

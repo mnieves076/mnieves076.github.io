@@ -53,5 +53,9 @@ var StaticEntity = Entity.extend({
 	toggleSelection: function() {
 		this._super();		
 		this.healthStatusBar.setVisible(this.selected);
+		
+		if(this.selected) {
+			this.trace(this.id);
+		}
 	}
 });
