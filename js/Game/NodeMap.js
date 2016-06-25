@@ -244,5 +244,19 @@ var NodeMap = BaseObject.extend({
 		var x = n.x * this.size;
 		var y = n.y * this.size;
 		return new Thunder.Point(x,y);
-	}
+	},
+	
+	drawNodeMarkers: function() {
+		var h = "";
+		
+		for(var c = 0; c <= this.width / this.size; c++) {
+			for(var r = 0; r <= this.height / this.size; r++) {
+				if(this.nodes[c][r].ENTITY != null) {
+					h += "<img src='image/marker-blue.jpg' style='position: absolute; top: " + (r * this.size) + "px; left: " + (c * this.size) + "px'/>";
+				}
+			}
+		}
+		
+		App.game.assetManager.getAsset("PATH_DISPLAY").container.html(h);
+	},
 });

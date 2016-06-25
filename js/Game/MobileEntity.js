@@ -103,6 +103,7 @@ var MobileEntity = Entity.extend({
 	},
 
 	move: function() {
+		var tt = this;
 		this.isMoving = true;
 		this.moving = false;
 
@@ -125,17 +126,13 @@ var MobileEntity = Entity.extend({
 					var d = this.getPosition().getDistance(newPosition);
 					var t = (d / this.maxSpeed) * 1000;
 					var m = this;
+					this.moveNodeMap(nextRouteNode);
+					this.node = nextRouteNode;
 					
 					this.container.stop(1,1);
 					this.container.animate({top: newPosition.y, left: newPosition.x},t,'linear',function() {
 						m.move();
 					});
-					//this.updateNodeMap(0);
-					this.moveNodeMap(nextRouteNode);
-					this.node = nextRouteNode;
-					//this.sendSyncEvent = true;
-					//this.updateNodeMap(1);
-					//this.eventQueue.addUniqueEvent("MOVE",t,null);
 				} else {
 					//If unit is blocked, then recalculate route
 					this.eventQueue.removeEvent("MOVE");

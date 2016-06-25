@@ -51,8 +51,8 @@ var Game = Thunder.Component.extend({
 
 		//Initialize layers
 		this.layerManager.addLayer("/MAP");
-		this.layerManager.addLayer("/PATH");
 		this.layerManager.addLayer("/ENTITY");
+		this.layerManager.addLayer("/PATH");
 		this.layerManager.addLayer("/EXPLOSION");
 		this.layerManager.addLayer("/PROJECTILE");
 		this.layerManager.addLayer("/INDICATOR");
