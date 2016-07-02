@@ -59,5 +59,15 @@ var EnemyTankEntity = TankEntity.extend({
 	stopAttack: function() {
 		this._super();
 		this.broadcastUniqueEvent("ASSIGN_TARGETS",null,100);
-	}
+	}/* ,
+	
+	move: function() {
+		this._super();
+
+		if(this.route.length == 0 && this.selected) {
+			if(this.route.length > 0) { App.game.clearPath(); }
+		} else if(this.selected) {
+			if(this.route.length > 0) { App.game.drawPath(this.route); }
+		}
+	}, */
 });

@@ -87,9 +87,9 @@ var Entity = Thunder.Component.extend({
 	},
 
 	registerDamageByValue: function(damage, emit) {
-		if(App.game.isMultiplayer && emit) {
+		/* if(App.game.isMultiplayer && emit) {
 			App.multiplayerManager.send({"command":"ENTITY_DAMAGE","node":this.node,"damage":damage});
-		}
+		} */
 
 		if(damage > this.healthStatusBar.getValue()) {
 			this.healthStatusBar.setValue(0);

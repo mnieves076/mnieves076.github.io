@@ -24,13 +24,21 @@ var NodeMap = BaseObject.extend({
 	},
 
 	set: function(node, w, h, newState, entity, allowLOS) {
-		w = w / this.size;
-		h = h / this.size;
-
-		var xStartRange = node.x - w / 2;
+		/* w = w / this.size;
+		h = h / this.size;*/
+		var w = (entity.width - entity.blockOffsetX) / this.size;
+		var h = (entity.height - entity.blockOffsetY) / this.size;
+		
+		/* var xStartRange = node.x - w / 2;
 		var xEndRange = node.x + w / 2;
 		var yStartRange = node.y - h / 2;
-		var yEndRange = node.y + h / 2;
+		var yEndRange = node.y + h / 2;  */
+		
+	
+		var xStartRange = node.x - Math.floor(w / 2);
+		var xEndRange = node.x + Math.floor(w / 2);
+		var yStartRange = node.y - Math.floor(h / 2);
+		var yEndRange = node.y + Math.floor(h / 2);
 
 		if(xStartRange < 0) {
 			xStartRange = 0;
@@ -62,13 +70,20 @@ var NodeMap = BaseObject.extend({
 	},
 
 	move: function(oldNode, newNode, w, h, entity) {
-		w = w / this.size;
-		h = h / this.size;
-
-		var xStartRange = oldNode.x - w / 2;
+		/* w = w / this.size;
+		h = h / this.size;*/
+		var w = (entity.width - entity.blockOffsetX) / this.size;
+		var h = (entity.height - entity.blockOffsetY) / this.size;
+		
+		/* var xStartRange = oldNode.x - w / 2;
 		var xEndRange = oldNode.x + w / 2;
 		var yStartRange = oldNode.y - h / 2;
-		var yEndRange = oldNode.y + h / 2;
+		var yEndRange = oldNode.y + h / 2;  */
+		var xStartRange = oldNode.x - Math.floor(w / 2);
+		var xEndRange = oldNode.x + Math.floor(w / 2);
+		var yStartRange = oldNode.y - Math.floor(h / 2);
+		var yEndRange = oldNode.y + Math.floor(h / 2); 
+		
 		var min = 0;
 		var maxX = this.width / this.size;
 		var maxY = this.height / this.size;
@@ -164,15 +179,13 @@ var NodeMap = BaseObject.extend({
 		}
 
 		if(this.inBounds(node)) {
-			//var w = (entity.width - entity.blockOffsetX) / this.size;
-			//var h = (entity.height - entity.blockOffsetY) / this.size;
-			var w = entity.width / this.size;
-			var h = entity.height / this.size;
+			var w = (entity.width - entity.blockOffsetX) / this.size;
+			var h = (entity.height - entity.blockOffsetY) / this.size;
 		
-			var xStartRange = node.x - Math.ceil(w / 2);
-			var xEndRange = node.x + Math.ceil(w / 2);
-			var yStartRange = node.y - Math.ceil(h / 2);
-			var yEndRange = node.y + Math.ceil(h / 2);
+			var xStartRange = node.x - Math.floor(w / 2);
+			var xEndRange = node.x + Math.floor(w / 2);
+			var yStartRange = node.y - Math.floor(h / 2);
+			var yEndRange = node.y + Math.floor(h / 2);
 
 			if(xStartRange < 0) {
 				xStartRange = 0;
@@ -261,4 +274,9 @@ var NodeMap = BaseObject.extend({
 		
 		App.game.assetManager.getAsset("PATH_DISPLAY").container.html(h);
 	},
+	
+	drawNodeMarker: function(c,r) {
+		var h = "<img src='image/marker-blue.jpg' style='position: absolute; top: " + (r * this.size) + "px; left: " + (c * this.size) + "px'/>";		
+		App.game.assetManager.getAsset("PATH_DISPLAY").container.html(h);
+	}
 });

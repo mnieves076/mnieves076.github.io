@@ -183,7 +183,10 @@ var PlayerTankEntity = TankEntity.extend({
 
 	stop: function() {
 		this._super();
-		this.hanldeIdleBorderBlink();
+		
+		if(this.route.length < 0) {
+			this.hanldeIdleBorderBlink();
+		}
 	},
 
 	stopAttack: function() {

@@ -10,7 +10,7 @@ var MobileEntity = Entity.extend({
 		this.route = []; //Array of Thunder.Point
 		this.moving = false; //Boolean
 		this.isMoving = false; //Boolean
-		this.sendSyncEvent = false;
+		//this.sendSyncEvent = false;
 		
 		this.createResponders();
 	},
@@ -23,6 +23,7 @@ var MobileEntity = Entity.extend({
 		});
 			
 		this.addResponder("RECALCULATE_ROUTE", function(event) {
+			if(t.selected) t.trace("RECALCULATE_ROUTE");
 			t.moveTo(t.nodeGoal, t.angleGoal);
 		});
 	},
@@ -31,7 +32,7 @@ var MobileEntity = Entity.extend({
 		this.moving = false;
 
 		if(!this.isDestroyed) {
-			if(this.nodeMap.canEnter(newNodeGoal, this) || distanceLimit != null) {
+			if(this.nodeMap.canEnter(newNodeGoal, this, true) || distanceLimit != null) {
 				if(this.selected) this.trace("moveTo " + newNodeGoal.toString()); /////
 
 				this.nodeGoal = newNodeGoal;
@@ -86,15 +87,18 @@ var MobileEntity = Entity.extend({
 
 				if(e instanceof MobileEntity && e.isMoving) {
 					this.eventQueue.addUniqueEvent("MOVE",500);
-					this.trace(">> waiting to enter " + this.nodeGoal.toString());/////
+					if(this.selected) this.trace(">> waiting to enter " + this.nodeGoal.toString());/////
 					return;
-					/*} else {
-						this.eventQueue.addUniqueEvent("MOVE",2000);
-						return;
-					}*/
 				}
 
-				this.trace(">> can not reach " + this.nodeGoal.toString());/////
+				if(this.selected) this.trace(">> can not reach " + this.nodeGoal.toString());/////	
+				
+				//set the nodeGoal to the next closest route location
+				if(this.route.length > 0) {
+					this.nodeGoal = this.route[this.route.length - 1];
+					if(this.selected) this.trace(">> changed goal to " + this.nodeGoal.toString());/////						
+				} 
+				
 				this.stop();
 			}
 
@@ -135,17 +139,15 @@ var MobileEntity = Entity.extend({
 				} else {
 					//If unit is blocked, then recalculate route
 					this.eventQueue.removeEvent("MOVE");
-					//this.moving = false;
-
+					
 					if(this.nodeMap.canEnter(this.nodeGoal, this)) {
-						this.moving = true;
-						if(this.selected) this.trace("recalculate route to " + this.nodeGoal.toString());/////
-						this.eventQueue.addUniqueEvent("RECALCULATE_ROUTE",250);
+						if(this.selected) this.trace("recalculate route to " + this.nodeGoal.toString());
 					} else {
 						this.stop();
-						if(this.selected) this.trace("blocked, ending movement");
-						//this.isMoving = false;
+						if(this.selected) this.trace("blocked, ending movement, recalculating route");
 					}
+					
+					this.eventQueue.addUniqueEvent("RECALCULATE_ROUTE",250);
 				}
 			}
 		} else {
@@ -157,13 +159,8 @@ var MobileEntity = Entity.extend({
 				this.moving = true;
 				this.eventQueue.addUniqueEvent("MOVE",250,null);
 			} else {
-				//this.eventQueue.removeEvent("RECALCULATE_ROUTE");
-				//this.eventQueue.removeEvent("MOVE");
-				//this.angleGoal = null;
-				//this.isMoving = false;
 				this.stop();
-				//this.sendSyncEvent = true;
-				if(this.selected) this.trace("at destination: ending movement");
+				if(this.selected) this.trace("at destination, ending movement");				
 			}
 		}
 	},
@@ -190,13 +187,14 @@ var MobileEntity = Entity.extend({
 	},
 
 	stop: function() {
+		this.isMoving = false;
+		
 		if(this.moving) {
-			this.eventQueue.removeEvent("RECALCULATE_ROUTE");
+			this.eventQueue.removeEvent("RECALCULATE_ROUTE");		
 			this.nodeGoal = this.node.getCopy();
-			//this.sendSyncEvent = true;
 			this.angleGoal = null;
-			this.route = [];
-		}
+			this.route = [];	
+		}	
 	},
 
 	findInRoute: function(wayPoint) {

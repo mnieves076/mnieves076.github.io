@@ -235,9 +235,9 @@ var TankEntity = MobileEntity.extend({
 									this.stopAttack();
 									this.attackEntity(e);
 
-									if(App.game.isMultiplayer) {
+									/* if(App.game.isMultiplayer) {
 										App.multiplayerManager.send({"command":"FIRE_UNITS_AT_ENTITY","fireCommands":[{"index":this.index,"node":e.node}]});
-									}
+									} */
 								}
 							}
 						}

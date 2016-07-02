@@ -512,7 +512,7 @@ var Game = Thunder.Component.extend({
 		Net Unit Functions
 	*************************************/
 
-	moveNetUnits: function(movementCommands) {
+	/* moveNetUnits: function(movementCommands) {
 		for(var i = 0; i < movementCommands.length; i++) {
 			this.enemyUnits[movementCommands[i].index].stop();
 			this.enemyUnits[movementCommands[i].index].stopAttack();
@@ -651,7 +651,7 @@ var Game = Thunder.Component.extend({
 			}
 
 		}
-	},
+	}, */
 
 	/************************************
 		Selection Functions
@@ -997,7 +997,7 @@ var Game = Thunder.Component.extend({
 
 		if(this.playerUnits.length > 0) {
 			for(var i = 0; i < this.enemyUnits.length; i++) {
-				if(!this.enemyUnits[i].isDestroyed && this.enemyUnits[i].targetEntity == null) {
+				if(!this.enemyUnits[i].isDestroyed && (this.enemyUnits[i].targetEntity == null || this.enemyUnits[i].targetEntity.isDestroyed)) {
 					for(var ii = 0; ii < this.playerUnits.length; ii++) {
 						if(!this.playerUnits[ii].isDestroyed) {
 							if(this.getAssignmentCount(this.playerUnits[ii]) < 2 || (this.enemyUnitCount / this.playerUnitCount > 2)) {
@@ -1077,7 +1077,7 @@ var Game = Thunder.Component.extend({
 		Multiplayer Functions
 	*************************************/
 
-	startMatch: function(whichMap,whichStart,initOpponent,totalUnits) {
+/* 	startMatch: function(whichMap,whichStart,initOpponent,totalUnits) {
 		this.gameOver = false;
 		this.isMultiplayer = true;
 		this.load(whichMap);
@@ -1125,7 +1125,7 @@ var Game = Thunder.Component.extend({
 		App.chatDialog.hide();
 		this.stop();
 		this.eventQueue.removeEvent("SYNC_EVENT");
-	},
+	}, */
 
 	/************************************
 
