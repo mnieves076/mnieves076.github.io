@@ -61,7 +61,7 @@ var Game = Thunder.Component.extend({
 
 		//Listen for window resize
 		var t = this;
-		$(window).resize(function() { t.handleResize() });
+		window.addEventListener("resize", function() { t.handleResize() });
 
 		//Start
 		this.createResponders();
@@ -82,7 +82,7 @@ var Game = Thunder.Component.extend({
 		var t = this;
 
 		this.addResponder("MOUSEDOWN", function(event) {
-			$(document).focus();
+			window.focus();
 			t.currentMousePosition = event.getLocalEventPosition();
 			t.mouseDownPosition = event.getLocalEventPosition();
 
@@ -227,11 +227,11 @@ var Game = Thunder.Component.extend({
 
 		t.addCustomizer("mouse_input", function(asset) {
 			t.mouseEventMap = new Thunder.EventMap(asset.container,asset,t.eventQueue);
-			asset.container.html("<img style='cursor: pointer; width:" + asset.width + "px; height:" + asset.height + "px' src='image/transpix.gif' id='" + asset.tag + "'/>");
+			asset.container.innerHTML = "<img style='cursor: pointer; width:" + asset.width + "px; height:" + asset.height + "px' src='image/transpix.gif' id='" + asset.tag + "'/>";
 		});
 		
 		t.addCustomizer("img", function(asset) {
-			asset.container.html("<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "'/>");
+			asset.container.innerHTML = "<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "'/>";
 		});
 		
 		t.addCustomizer("playerunit", function(asset) {
@@ -278,7 +278,7 @@ var Game = Thunder.Component.extend({
 		});
 		
 		t.addCustomizer("html", function(asset) {
-			asset.container.html("<div style='position:absolute;width:100%;height:100%;'>" + t.getHTML(asset.tag) + "</div>");
+			asset.container.innerHTML = "<div style='position:absolute;width:100%;height:100%;'>" + t.getHTML(asset.tag) + "</div>";
 			Cufon.refresh();
 		});
 		
@@ -292,7 +292,7 @@ var Game = Thunder.Component.extend({
 		});
 		
 		t.addCustomizer("box", function(asset) {
-			asset.container.html("<div style='position: absolute; background-color: " + asset.param + "; width: 100%; height: 100%'/>");
+			asset.container.innerHTML = "<div style='position: absolute; background-color: " + asset.param + "; width: 100%; height: 100%'/>";
 		});
 	},
 
@@ -732,12 +732,12 @@ var Game = Thunder.Component.extend({
 	},
 
 	updateInputCursor: function() {
-		var d = this.assetManager.getAsset("MOUSE_INPUT").container.find("img");
+		var d = this.assetManager.getAsset("MOUSE_INPUT").container.querySelector("img");
 
 		if(this.getSelection().length > 0) {
-			d.css({"cursor":"crosshair"});
+			d.style.cursor = "crosshair";
 		} else {
-			d.css({"cursor":"pointer"});
+			d.style.cursor = "pointer";
 		}
 	},
 
@@ -825,8 +825,8 @@ var Game = Thunder.Component.extend({
 	bindKeyEvents: function() {
 		var t = this;
 
-		$(document).focus();
-		$(document).keypress(function(event) {
+		window.focus();
+		document.addEventListener("keydown", function(event) {
 			if (typeof event.keyCode != "undefined") {
 				var k = event.keyCode;
 			} else {
@@ -956,6 +956,7 @@ var Game = Thunder.Component.extend({
 
 		var projectile = this.projectiles.pop();
 		projectile.asset.setPosition(startPoint.x,startPoint.y);
+		//var n = this.nodeMap.mapPointToNode(projectile.asset.getPosition());
 		var n = this.nodeMap.mapPointToNode(projectile.asset.getPosition());
 		projectile.node = n;
 		projectile.setTarget(endNode, entityOwner);
@@ -1163,10 +1164,12 @@ var Game = Thunder.Component.extend({
 		var asset = this.assetManager.getAsset("MOUSE_INPUT");
 		asset.setWidth(mapWidth);
 		asset.setHeight(mapHeight);
-		$("#MOUSE_INPUT").css({"width": mapWidth + "px","height": mapHeight + "px"});
-
+		
 		this.handleResize();
 		this.drawMap();
+		
+		document.getElementById("MOUSE_INPUT").style.width = mapWidth + "px";
+		document.getElementById("MOUSE_INPUT").style.height = mapHeight + "px";
 	},
 
 	getUnitCount: function() {
@@ -1240,12 +1243,16 @@ var Game = Thunder.Component.extend({
 				h += "<img src='image/marker.jpg' style='position: absolute; top: " + (route[i].y * this.nodeMap.size) + "px; left: " + (route[i].x * this.nodeMap.size) + "px'/>";
 			}
 
-			this.assetManager.getAsset("PATH_DISPLAY").container.html(h);
+			this.assetManager.getAsset("PATH_DISPLAY").container.innerHTML = h;
 		}
 	},
 
 	clearPath: function() {
-		this.assetManager.getAsset("PATH_DISPLAY").container.empty();
+		let c = this.assetManager.getAsset("PATH_DISPLAY").container;
+
+		while (c.lastChild) {
+			c.removeChild(c.lastChild);
+		}
 	},
 
 	/************************************
@@ -1310,8 +1317,8 @@ var Game = Thunder.Component.extend({
 	*************************************/
 
 	handleResize: function() {
-		var w = $(window).width() - gAdWidth;
-		var h = $(window).height();
+		var w = window.innerWidth;
+		var h = window.innerHeight;
 
 		if(w < 500) { w = 500; }
 		if(h < 500) { h = 500; }

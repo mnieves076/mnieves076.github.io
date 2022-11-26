@@ -27,7 +27,7 @@ var NavBar = Thunder.Component.extend({
 		
 		//Listen for window resize
 		var t = this;
-		$(window).resize(function() { t.handleResize() });
+		window.addEventListener("resize", function() { t.handleResize() });
 		
 		//start
 		this.createResponders();
@@ -81,7 +81,7 @@ var NavBar = Thunder.Component.extend({
 		var t = this;
 				
 		this.addCustomizer("img", function(asset) {	
-			asset.container.html("<img width='100%' height='100%' src='" + asset.src + "' id='" + asset.tag + "'/>");
+			asset.container.innerHTML = "<img width='100%' height='100%' src='" + asset.src + "' id='" + asset.tag + "'/>";
 		});
 		
 		this.addCustomizer("btn", function(asset) {	
@@ -105,8 +105,8 @@ var NavBar = Thunder.Component.extend({
 	},
 	
 	handleResize: function() {		
-		var w = $(window).width() - gAdWidth;;
-		var h = $(window).height();
+		var w = window.innerWidth;
+		var h = window.innerHeight;
 		
 		if(w > App.game.levelManager.getMapPixelWidth()) {
 			w = App.game.levelManager.getMapPixelWidth();

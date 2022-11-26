@@ -25,7 +25,7 @@ var MiniMap = Thunder.Component.extend({
 		
 		//Listen for window resize
 		var t = this;
-		$(window).resize(function() { t.handleResize() });
+		window.addEventListener("resize", function() { t.handleResize() });
 		
 		//Start
 		this.createResponders();
@@ -61,15 +61,15 @@ var MiniMap = Thunder.Component.extend({
 		
 		this.addCustomizer("mouse_input", function(asset) {
 			t.mouseEventMap = new Thunder.EventMap(asset.container,asset,t.eventQueue);
-			asset.container.html("<img style='cursor: pointer; width:" + asset.width + "px; height:" + asset.height + "px' src='image/transpix.gif' id='" + asset.tag + "'/>");
+			asset.container.innerHTML = "<img style='cursor: pointer; width:" + asset.width + "px; height:" + asset.height + "px' src='image/transpix.gif' id='" + asset.tag + "'/>";
 		});
 	},
 	
 	draw: function() {
 		this.layerManager.layOut(this.assetManager.getAssets("gui"),"/GUI");
-		this.viewAsset.getContainer().css({"border":"1px solid #FFFF00"});
+		this.viewAsset.getContainer().style.border = "1px solid #FFFF00";
 		
-		this.mapAsset.getContainer().css({"background-color":"#000000"});
+		this.mapAsset.getContainer().style.backgroundColor = "#000000";
 		this.mapAsset.setAlpha(0.5);
 		
 		this.repaint();
@@ -93,7 +93,7 @@ var MiniMap = Thunder.Component.extend({
 			h += "<div style='position: absolute; background-color: " + color + "; width: 6px; height: 6px; left:" + (this.entityList[i].node.x - 3) + "px; top:" + (this.entityList[i].node.y - 3) + "px;'></div>";
 		}
 		
-		this.mapAsset.getContainer().html(h);
+		this.mapAsset.getContainer().innerHTML = h;
 		this.eventQueue.addUniqueEvent("REPAINT",2000);
 	},
 	
@@ -128,8 +128,8 @@ var MiniMap = Thunder.Component.extend({
 	},
 	
 	handleResize: function() {
-		this.viewWidth = ($(window).width() - gAdWidth) / 10;
-		this.viewHeight = $(window).height() / 10;
+		this.viewWidth = window.innerWidth / 10;
+		this.viewHeight = window.innerHeight / 10;
 		
 		if(this.viewWidth > this.mapWidth) {
 			this.viewWidth = this.mapWidth;	

@@ -29,7 +29,7 @@ var ScrollWidget = Thunder.Component.extend({
 			var asset = this.assetManager.getAsset("doc");
 			
 			if(asset != null) {
-				asset.getContainer().find(".loader").css("top",y);
+				asset.getContainer().querySelector(".loader").style.top = y;
 			}
 		});
 		
@@ -42,7 +42,7 @@ var ScrollWidget = Thunder.Component.extend({
 		var t = this;
 		
 		this.addCustomizer("html", function(asset) {
-			asset.container.html("<div class='loader' style='position:absolute;width: " + (t.width - 16) + "px'></div>");
+			asset.container.innerHTML = "<div class='loader' style='position:absolute;width: " + (t.width - 16) + "px'></div>";
 			asset.container.find(".loader").load(asset.src + "?" + (new Date()).getTime(), function() { Cufon.now(); Cufon.refresh(); t.refresh() });
 			asset.setMask(0,asset.width,asset.height,0);
 		});

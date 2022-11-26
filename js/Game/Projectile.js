@@ -30,7 +30,7 @@ var Projectile = Thunder.Component.extend({
 		var t = this;
 
 		this.addCustomizer("img", function(asset) {	
-			asset.container.html("<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' style='position: absolute'/>");
+			asset.container.innerHTML = "<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' style='position: absolute'/>";
 		});
 	},
 
@@ -86,10 +86,9 @@ var Projectile = Thunder.Component.extend({
 			this.setPosition(this.route[0].x * this.nodeMap.size,this.route[0].y * this.nodeMap.size);
 			var d = this.node.getDistance(this.nodeGoal);
 			var t = (d / this.maxSpeed) * 1000;
-			var self = this;
 			var x = this.nodeGoal.x * this.nodeMap.size;
 			var y = this.nodeGoal.y * this.nodeMap.size;
-			this.container.animate({top: y, left: x},t,'linear',function() { self.movementComplete() });
+			Velocity(this.container,{top: y, left: x}, {duration: t, easing: 'linear', complete: () => { this.movementComplete();}});
 		}
 	},
 

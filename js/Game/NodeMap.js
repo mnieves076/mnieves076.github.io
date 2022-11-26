@@ -272,11 +272,11 @@ var NodeMap = BaseObject.extend({
 			}
 		}
 		
-		App.game.assetManager.getAsset("PATH_DISPLAY").container.html(h);
+		App.game.assetManager.getAsset("PATH_DISPLAY").container.innerHTML = h;
 	},
 	
 	drawNodeMarker: function(c,r) {
 		var h = "<img src='image/marker-blue.jpg' style='position: absolute; top: " + (r * this.size) + "px; left: " + (c * this.size) + "px'/>";		
-		App.game.assetManager.getAsset("PATH_DISPLAY").container.html(h);
+		App.game.assetManager.getAsset("PATH_DISPLAY").container.innerHTML = h;
 	}
 });

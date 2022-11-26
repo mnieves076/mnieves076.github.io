@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 
-<script src="js/jquery-3.0.0.min.js"></script>
+<!--script src="js/jquery-3.0.0.min.js"></script-->
 <script src="js/velocity.min.js"></script>
 <script src="js/cufon-yui.js"></script>
 <script src="js/Handel_Gothic.font.js"></script>
 <script src="js/soundmanager2-jsmin.js"></script>
-<script src="js/Thunder/thunder-1.1.0.min.js"></script>
+<script src="js/Thunder/thunder-1.2.0.js"></script>
 <script src="js/Thunder/gui/scrollbar.min.js"></script>
 <script src="js/Widget/ScrollWidget.js"></script>
 <script src="js/Game/Indicator.js"></script>
@@ -51,20 +51,19 @@
 
 <script type="text/javascript">
 Thunder.DEBUG = true;
-var App;
-var debug = Thunder.DEBUG;
-var gIsMobile = (navigator.userAgent.toLowerCase().search(/iphone|ipod|ipad|android|mobile|sony|symbian|nokia|samsung|windows ce|epoc|opera mini|nitro|j2me|netfront|mot|blackberry|ericsson|panasonic|philips|sanyo|sharp|portalmmm|blazer|avantgo|danger|palm|series60|palmso|urce|pocketpc|smartphone|rover|ipaq|alcatel|ericy|vodafone/i) > -1);
-var gAudio = [];
-var gBackgroundAudio = [];
-var gAdWidth = 0;
-var gHost = "pindax.com";
-var gUserLevel = 1;
-var gUserMaps = [];
-var gAchievements = [];
-var gResumeAudio = true;
+let App;
+let debug = Thunder.DEBUG;
+let gIsMobile = (navigator.userAgent.toLowerCase().search(/iphone|ipod|ipad|android|mobile|sony|symbian|nokia|samsung|windows ce|epoc|opera mini|nitro|j2me|netfront|mot|blackberry|ericsson|panasonic|philips|sanyo|sharp|portalmmm|blazer|avantgo|danger|palm|series60|palmso|urce|pocketpc|smartphone|rover|ipaq|alcatel|ericy|vodafone/i) > -1);
+let gAudio = [];
+let gBackgroundAudio = [];
+let gHost = "pindax.com";
+let gUserLevel = 1;
+let gUserMaps = [];
+let gAchievements = [];
+let gResumeAudio = true;
 
-for(var i = 1; i <= 16; i++) {
-	var c = (i < 10) ? "0" + i : i;
+for(let i = 1; i <= 16; i++) {
+	let c = (i < 10) ? "0" + i : i;
 	gAchievements["LEVEL_" + i] = {"key":"level" + c,"description":"Complete Level " + i};
 }
 
@@ -75,104 +74,102 @@ gAchievements["THE_GAUNTLET"] = {"key":"the_gauntlet","description":"Win a battl
 gAchievements["THE_MEAT_GRINDER"] = {"key":"the_meat_grinder","description":"Win a battle on The Meat Grinder"};
 gAchievements["THE_CAULDRON"] = {"key":"the_cauldron","description":"Win a battle on The Cauldron"};
 
-var gImageLoaderCheckInterval;
-var gImageLoaderTimeOutCounter = 0;
-var gPreloaderImages; 
+let gImageLoaderCheckInterval;
+let gImageLoaderTimeOutCounter = 0;
+let gPreloaderImages; 
 
-$(document).ready(function() {
-	var h = "<img src='image/transpix.gif'/>";
-	h += "<img src='image/dialog/shade.png'/>";
-	h += "<img src='image/loader.gif'/>";
-    h += "<img src='image/start_pic.jpg'/>";
-    h += "<img src='image/bg_message.png'/>";
-	h += "<img src='image/btn/accept.jpg'/>";
-	h += "<img src='image/btn/cancel.jpg'/>";
-	h += "<img src='image/btn/chat.jpg'/>";
-	h += "<img src='image/btn/close.jpg'/>";
-	h += "<img src='image/btn/decline.jpg'/>";
-	h += "<img src='image/btn/howToPlay.jpg'/>";
-	h += "<img src='image/btn/likeTheGame.jpg'/>";
-	h += "<img src='image/btn/menu.jpg'/>";
-	h += "<img src='image/btn/more.jpg'/>";
-	h += "<img src='image/btn/multiplayer.jpg'/>";
-	h += "<img src='image/btn/nextLevel.jpg'/>";
-	h += "<img src='image/btn/no.jpg'/>";
-	h += "<img src='image/btn/ok.jpg'/>";
-	h += "<img src='image/btn/quit.jpg'/>";
-	h += "<img src='image/btn/replayLevel.jpg'/>";
-	h += "<img src='image/btn/send.jpg'/>";
-	h += "<img src='image/btn/sendChallenge.jpg'/>";
-	h += "<img src='image/btn/share.jpg'/>";
-	h += "<img src='image/btn/singleplayer.jpg'/>";
-	h += "<img src='image/btn/soundOff.jpg'/>";
-	h += "<img src='image/btn/soundOffSmall.jpg'/>";
-	h += "<img src='image/btn/soundOn.jpg'/>";
-	h += "<img src='image/btn/soundOnSmall.jpg'/>";
-	h += "<img src='image/btn/start.jpg'/>";
-	h += "<img src='image/btn/video.jpg'/>";
-	h += "<img src='image/btn/x.jpg'/>";
-	h += "<img src='image/btn/yes.jpg'/>";
-	h += "<img src='image/btn/signIn.jpg'/>";
-	h += "<img src='image/btn/cancelSmall.jpg'/>";
-	h += "<img src='image/inGameLogo.png'/>";
-	h += "<img src='image/TheAsphaultJungle.jpg'/>";
-    h += "<img src='image/TheCanOpener.jpg'/>";
-    h += "<img src='image/TheCauldron.jpg'/>";
-    h += "<img src='image/TheGauntlet.jpg'/>";
-    h += "<img src='image/TheMeatGrinder.jpg'/>";
-    h += "<img src='image/TheTurkeyShoot.jpg'/>";
-    h += "<img src='image/House40-Destroyed.png'/>";
-    h += "<img src='image/House40-blue.png'/>";
-    h += "<img src='image/House40-pink.png'/>";
-    h += "<img src='image/House40-green.png'/>";
-    h += "<img src='image/House40-white.png'/>";
-    h += "<img src='image/House60-Destroyed.png'/>";
-    h += "<img src='image/House60-garage.png'/>";
-    h += "<img src='image/House60-green.png'/>";
-    h += "<img src='image/House60-purple.png'/>";
-    h += "<img src='image/House80-blue.png'/>";
-    h += "<img src='image/House80-Destroyed.png'/>";
-    h += "<img src='image/House80-green.png'/>";
-    h += "<img src='image/House80-orange.png'/>";
-    h += "<img src='image/House80-yellow.png'/>";
-    h += "<img src='image/pond100x120.png'/>";
-    h += "<img src='image/pond100x80.png'/>";
-    h += "<img src='image/pond140x160.png'/>";
-    h += "<img src='image/river-bottom.png'/>";
-    h += "<img src='image/river-middle.png'/>";
-    h += "<img src='image/river-top.png'/>";
-    h += "<img src='image/Tree40-Destroyed.png'/>";
-    h += "<img src='image/Tree40-summer.png'/>";
-    h += "<img src='image/DestroyedEnemyTankStrip.png'/>";
-    h += "<img src='image/DestroyedPlayerTankStrip.png'/>";
-    h += "<img src='image/PlayerTankStrip.png'/>";
-    h += "<img src='image/EnemyTankStrip.png'/>";
-    h += "<img src='image/marker.jpg'/>";
-    h += "<img src='image/OrientationStrip.png'/>";
-    h += "<img src='image/ExplosionStrip.png'/>";
-    h += "<img src='image/shell.jpg'/>";
-    h += "<img src='image/TargetStrip.png'/>"; 
-	$("#preloader").html(h);
-	
-	gPreloaderImages = $("#preloader img");
-	gImageLoaderCheckInterval = setInterval(imageLoadChecker,100);
-	$("#root").width($(window).width() - gAdWidth);
-});
+let h = "<img src='image/transpix.gif'/>";
+h += "<img src='image/dialog/shade.png'/>";
+h += "<img src='image/loader.gif'/>";
+h += "<img src='image/start_pic.jpg'/>";
+h += "<img src='image/bg_message.png'/>";
+h += "<img src='image/btn/accept.jpg'/>";
+h += "<img src='image/btn/cancel.jpg'/>";
+h += "<img src='image/btn/chat.jpg'/>";
+h += "<img src='image/btn/close.jpg'/>";
+h += "<img src='image/btn/decline.jpg'/>";
+h += "<img src='image/btn/howToPlay.jpg'/>";
+h += "<img src='image/btn/likeTheGame.jpg'/>";
+h += "<img src='image/btn/menu.jpg'/>";
+h += "<img src='image/btn/more.jpg'/>";
+h += "<img src='image/btn/multiplayer.jpg'/>";
+h += "<img src='image/btn/nextLevel.jpg'/>";
+h += "<img src='image/btn/no.jpg'/>";
+h += "<img src='image/btn/ok.jpg'/>";
+h += "<img src='image/btn/quit.jpg'/>";
+h += "<img src='image/btn/replayLevel.jpg'/>";
+h += "<img src='image/btn/send.jpg'/>";
+h += "<img src='image/btn/sendChallenge.jpg'/>";
+h += "<img src='image/btn/share.jpg'/>";
+h += "<img src='image/btn/singleplayer.jpg'/>";
+h += "<img src='image/btn/soundOff.jpg'/>";
+h += "<img src='image/btn/soundOffSmall.jpg'/>";
+h += "<img src='image/btn/soundOn.jpg'/>";
+h += "<img src='image/btn/soundOnSmall.jpg'/>";
+h += "<img src='image/btn/start.jpg'/>";
+h += "<img src='image/btn/video.jpg'/>";
+h += "<img src='image/btn/x.jpg'/>";
+h += "<img src='image/btn/yes.jpg'/>";
+h += "<img src='image/btn/signIn.jpg'/>";
+h += "<img src='image/btn/cancelSmall.jpg'/>";
+h += "<img src='image/inGameLogo.png'/>";
+h += "<img src='image/TheAsphaultJungle.jpg'/>";
+h += "<img src='image/TheCanOpener.jpg'/>";
+h += "<img src='image/TheCauldron.jpg'/>";
+h += "<img src='image/TheGauntlet.jpg'/>";
+h += "<img src='image/TheMeatGrinder.jpg'/>";
+h += "<img src='image/TheTurkeyShoot.jpg'/>";
+h += "<img src='image/House40-Destroyed.png'/>";
+h += "<img src='image/House40-blue.png'/>";
+h += "<img src='image/House40-pink.png'/>";
+h += "<img src='image/House40-green.png'/>";
+h += "<img src='image/House40-white.png'/>";
+h += "<img src='image/House60-Destroyed.png'/>";
+h += "<img src='image/House60-garage.png'/>";
+h += "<img src='image/House60-green.png'/>";
+h += "<img src='image/House60-purple.png'/>";
+h += "<img src='image/House80-blue.png'/>";
+h += "<img src='image/House80-Destroyed.png'/>";
+h += "<img src='image/House80-green.png'/>";
+h += "<img src='image/House80-orange.png'/>";
+h += "<img src='image/House80-yellow.png'/>";
+h += "<img src='image/pond100x120.png'/>";
+h += "<img src='image/pond100x80.png'/>";
+h += "<img src='image/pond140x160.png'/>";
+h += "<img src='image/river-bottom.png'/>";
+h += "<img src='image/river-middle.png'/>";
+h += "<img src='image/river-top.png'/>";
+h += "<img src='image/Tree40-Destroyed.png'/>";
+h += "<img src='image/Tree40-summer.png'/>";
+h += "<img src='image/DestroyedEnemyTankStrip.png'/>";
+h += "<img src='image/DestroyedPlayerTankStrip.png'/>";
+h += "<img src='image/PlayerTankStrip.png'/>";
+h += "<img src='image/EnemyTankStrip.png'/>";
+h += "<img src='image/marker.jpg'/>";
+h += "<img src='image/OrientationStrip.png'/>";
+h += "<img src='image/ExplosionStrip.png'/>";
+h += "<img src='image/shell.jpg'/>";
+h += "<img src='image/TargetStrip.png'/>"; 
+document.getElementById("preloader").innerHTML = h;
+
+gPreloaderImages = document.querySelectorAll("#preloader img");
+gImageLoaderCheckInterval = setInterval(imageLoadChecker,100);
+document.getElementById("root").style.width = window.innerWidth;
 
 function imageLoadChecker() {	
 	//ensure that all preloader images have loaded before proceeding	
-	var c = 0;
+	let c = 0;
 	
 	if(gPreloaderImages.length > 0 && (++gImageLoaderTimeOutCounter) < 200) {		
-		for(var i = 0; i < gPreloaderImages.length; i++) {
+		for(let i = 0; i < gPreloaderImages.length; i++) {
 			if ( gPreloaderImages[i].complete || gPreloaderImages[i].readyState == 4 || gPreloaderImages[i].readyState == "complete" ) {
 				c++;
 			}
 		}
 		
-		var p = Math.floor(c / (gPreloaderImages.length / 100));
-		$("#progress_field").html("Loading: " + p + "%");
-		$("#progress_bar").css({"width": ((160 / 100) * p) + "px"});
+		let p = Math.floor(c / (gPreloaderImages.length / 100));
+		document.getElementById("progress_field").innerHTML = "Loading: " + p + "%";
+		document.getElementById("progress_bar").style.width = ((160 / 100) * p) + "px";
 		
 		if(c >= gPreloaderImages.length) {
 			start();
@@ -190,11 +187,11 @@ function start() {
 	clearInterval(gImageLoaderCheckInterval);
 	
 	if(gIsMobile) {
-		$("#root").bind("touchmove",function(event){ event.preventDefault(); });
+		document.getElementById("root").addEventListener("touchmove", function(event){ event.preventDefault(); });
 	}
 	
 	Cufon.replace('.Handel_Gothic', { fontFamily: 'Handel Gothic D', display: 'block' });
-	App = new Application($("#root").empty(),debug);
+	App = new Application(document.getElementById("root"),debug);
 	
 	soundManager.setup({
 		debugMode: false 
@@ -230,14 +227,4 @@ function start() {
 		}
 	});
 }
-
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-76141-5']);
-_gaq.push(['_trackPageview']);
-
-(function() {
-var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
 </script>

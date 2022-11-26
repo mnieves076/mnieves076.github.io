@@ -40,7 +40,7 @@ var MessageWidget = Thunder.Component.extend({
 		var t = this;
 		
 		this.addCustomizer("img", function(asset) {					
-			asset.container.html("<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "'/>");
+			asset.container.innerHTML = "<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "'/>";
 		});
 	
 		this.addCustomizer("btn", function(asset) {
@@ -51,7 +51,7 @@ var MessageWidget = Thunder.Component.extend({
 		this.addCustomizer("html", function(asset) {
 			var h = "<div style='position:absolute;width:100%;height:100%;'>";
 			h += "<div class='Handel_Gothic'><p>Achievement Unlocked:<br/>" + gAchievements[t.achievement].description + "</p></div></div>";
-			asset.container.html(h);
+			asset.container.innerHTML = h;
 			Cufon.refresh();
 		});
 	},

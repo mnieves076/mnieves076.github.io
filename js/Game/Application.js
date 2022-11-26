@@ -23,7 +23,7 @@ var Application = Thunder.Component.extend({
 
 		//Listen for window resize
 		var t = this;
-		$(window).resize(function() { t.handleResize() });
+		window.addEventListener("resize", function() { t.handleResize() });
 
 		//Start
 		var s = window.localStorage.getItem("ATPG_PLAYER_ACHIEVEMENTS");
@@ -197,7 +197,7 @@ var Application = Thunder.Component.extend({
 		var t = this;
 
 		t.addCustomizer("img", function(asset) {
-			asset.container.html("<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "'/>");
+			asset.container.innerHTML = "<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "'/>";
 		});
 		
 		t.addCustomizer("btn", function(asset) {
@@ -206,11 +206,11 @@ var Application = Thunder.Component.extend({
 		});
 		
 		t.addCustomizer("box", function(asset) {
-			asset.container.html("<div style='position: absolute; background-color: " + asset.param + "; width: 100%; height: 100%'/>");
+			asset.container.innerHTML = "<div style='position: absolute; background-color: " + asset.param + "; width: 100%; height: 100%'/>";
 		});
 		
 		t.addCustomizer("html", function(asset) {
-			asset.container.html("<div style='position:absolute;width:100%;height:100%;'>" + t.getHTML(asset.tag) + "</div>");
+			asset.container.innerHTML = "<div style='position:absolute;width:100%;height:100%;'>" + t.getHTML(asset.tag) + "</div>";
 			Cufon.refresh();
 		});
 		
@@ -467,7 +467,7 @@ var Application = Thunder.Component.extend({
 	},
 
 	track: function(category,action) {
-		_gaq.push(['_trackEvent', category, action]);
+		console.log(category, action);
 	},
 
 	/************************************
@@ -517,13 +517,11 @@ var Application = Thunder.Component.extend({
 	*************************************/
 
 	handleResize: function() {
-		var w = $(window).width() - gAdWidth;
-		var h = $(window).height();
+		var w = window.innerWidth;
+		var h = window.innerHeight;
 
 		if(w < 500) { w = 500; }
 		if(h < 500) { h = 500; }
-
-		$("#ads").height(h);
 
 		this.setWidth(w);
 		this.setHeight(h);

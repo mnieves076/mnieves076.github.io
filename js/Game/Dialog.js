@@ -82,7 +82,7 @@ var Dialog = Thunder.Component.extend({
 		
 		//Listen for window resize
 		var t = this;
-		$(window).resize(function() { t.handleResize() });
+		window.addEventListener("resize", function() { t.handleResize() });
 		
 		this.createResponders();
 		this.createCustomizers();	
@@ -100,15 +100,15 @@ var Dialog = Thunder.Component.extend({
 		var t = this;
 		
 		this.addCustomizer("img", function(asset) {	
-			asset.container.html("<img width='100%' height='100%' src='" + asset.src + "' id='" + asset.tag + "'/>");
+			asset.container.innerHTML = "<img width='100%' height='100%' src='" + asset.src + "' id='" + asset.tag + "'/>";
 		});
 		
 		this.addCustomizer("box", function(asset) {	
-			asset.container.html("<div id='" + asset.tag + "' class='dialog' style='width: " + (t.width - 10) + "px; height: " + (t.height - 10) + "px;'/>");
+			asset.container.innerHTML = "<div id='" + asset.tag + "' class='dialog' style='width: " + (t.width - 10) + "px; height: " + (t.height - 10) + "px;'/>";
 		});
 		
 		this.addCustomizer("html", function(asset) {
-			asset.container.html("<div style='position:absolute;width:100%;height:100%;'>" + App.getHTML(asset.tag) + "</div>");
+			asset.container.innerHTML = "<div style='position:absolute;width:100%;height:100%;'>" + App.getHTML(asset.tag) + "</div>";
 			Cufon.refresh();
 		});
 		
@@ -139,8 +139,8 @@ var Dialog = Thunder.Component.extend({
 	},
 	
 	handleResize: function() {		
-		var w = $(window).width() - gAdWidth;;
-		var h = $(window).height();
+		var w = window.innerWidth;
+		var h = window.innerHeight;
 		
 		this.assetManager.getAsset("SHADE").setWidth(w);		
 		this.assetManager.getAsset("SHADE").setHeight(h);		

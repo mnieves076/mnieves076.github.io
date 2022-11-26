@@ -38,14 +38,14 @@ var Entity = Thunder.Component.extend({
 		var t = this;
 		
 		this.addCustomizer("img", function(asset) {
-			asset.container.html("<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "' style='position: absolute'/>");
+			asset.container.innerHTML = "<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "' style='position: absolute'/>";
 		});
 		
 		this.addCustomizer("box", function(asset) {
 			var h = "<div style='position: absolute; border: 2px " + asset.param.style;
 			h += " " + asset.param.color + "; width: " + (asset.width - 4) + "px; height: ";
 			h += (asset.height - 4) + "px;'/>"
-			asset.container.html(h);
+			asset.container.innerHTML = h;
 		});
 		
 		this.addCustomizer("health_status", function(asset) {

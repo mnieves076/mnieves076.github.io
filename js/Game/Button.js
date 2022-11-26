@@ -28,11 +28,11 @@ var Button = Thunder.Component.extend({
 		});
 		
 		this.addResponder("MOUSEENTER", function(event) {
-			t.container.find("img").css("top",(t.height * -1) + "px");
+			t.container.querySelector("img").style.top = (t.height * -1) + "px";
 		});
 		
 		this.addResponder("MOUSELEAVE", function(event) {
-			t.container.find("img").css("top","0px");
+			t.container.querySelector("img").style.top = "0px";
 		});
 	},
 	
@@ -43,7 +43,7 @@ var Button = Thunder.Component.extend({
 			new Thunder.EventMap(asset.container,asset,this.eventQueue);
 			var h = "<div style='position: absolute; cursor: pointer; width:" + this.width + "px; height:" + this.height + "px; overflow: hidden;" 
 			h += "'><img style='position:absolute' src='" + this.image + "' width='" + this.width + "' height='" + (this.height * 2) + "'/></div>";
-			asset.container.html(h);
+			asset.container.innerHTML = h;
 		});
 	},
 	

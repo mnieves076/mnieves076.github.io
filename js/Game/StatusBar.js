@@ -41,7 +41,7 @@ var StatusBar = Thunder.Component.extend({
 		var t = this;
 
 		this.addCustomizer("bar", function(asset) {
-			asset.container.append("<div class='bar' style='position:absolute; background-color: #" + asset.param + "; width: " + asset.width + "px; height: " + asset.height + "px;'/>");
+			asset.container.innerHTML += "<div class='bar' style='position:absolute; background-color: #" + asset.param + "; width: " + asset.width + "px; height: " + asset.height + "px;'/>";
 		});
 	},
 	
@@ -97,7 +97,11 @@ var StatusBar = Thunder.Component.extend({
 	
 	update: function() {	
 		var newWidth = this.width * (this.value / this.max);
-		this.assetManager.getAsset("FOREGROUND").container.find(".bar").css("width",newWidth + "px");
+		let n = this.assetManager.getAsset("FOREGROUND").container.querySelector(".bar");
+		
+		if(n) {
+			n.style.width = newWidth + "px";
+		}
 	},
 	
 	setReplenishRate: function(newReplenishValue, newReplenishInterval) {

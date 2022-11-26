@@ -126,16 +126,11 @@ var MobileEntity = Entity.extend({
 					if(this.selected) this.trace("moving to next route node");
 					this.moving = true;
 					var newPosition = new Thunder.Point((nextRouteNode.x * 10) - this.width / 2, (nextRouteNode.y * 10) - this.height / 2);
-					var d = this.getPosition().getDistance(newPosition);
-					var t = (d / this.maxSpeed) * 1000;
-					var m = this;
 					this.moveNodeMap(nextRouteNode);
 					this.node = nextRouteNode;
 					
-					this.container.stop(1,1);
-					this.container.animate({top: newPosition.y, left: newPosition.x},t,'linear',function() {
-						m.move();
-					});
+					Velocity(this.container,"stop");
+					Velocity(this.container,{top: newPosition.y, left: newPosition.x},{easing: 'linear', complete: () => { this.move();}});
 				} else {
 					//If unit is blocked, then recalculate route
 					this.eventQueue.removeEvent("MOVE");
@@ -177,7 +172,8 @@ var MobileEntity = Entity.extend({
 
 			var newPosition = new Thunder.Point((x * 10) - this.width / 2, (y * 10) - this.height / 2);
 			//newPosition = this.nodeMap.mapPointToNode(newPosition);
-			this.container.css({top: newPosition.y, left: newPosition.x});
+			this.container.style.top = newPosition.y;
+			this.container.style.left = newPosition.x;
 			this.updateNodeMap(0);
 			this.node = new Thunder.Point(x,y);
 			this.updateNodeMap(1);

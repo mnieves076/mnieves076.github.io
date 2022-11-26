@@ -24,7 +24,7 @@ var Indicator = Thunder.Component.extend({
 		var t = this;
 		
 		this.addCustomizer("img", function(asset) {	
-			asset.container.html("<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "' style='cursor: pointer'/>");
+			asset.container.innerHTML = "<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' id='" + asset.tag + "' style='cursor: pointer'/>";
 		});
 			
 	},

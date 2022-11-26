@@ -42,7 +42,7 @@ var Animation = Thunder.Component.extend({
 	
 	createCustomizers: function() {		
 		this.addCustomizer("img", function(asset) {	
-			asset.container.html("<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' style='position: absolute'/>");
+			asset.container.innerHTML = "<img width='" + asset.width + "' height='" + asset.height + "' src='" + asset.src + "' style='position: absolute'/>";
 		});
 	},
 	
